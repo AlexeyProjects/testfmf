@@ -14,6 +14,7 @@
 
             </div>
             <CloseIcon
+            v-if="canDeletePlayers"
             @clicked="deletePlayer(key)"
             class="addPlayers-item__delete ml-10"
             />
@@ -55,6 +56,11 @@
             players: {
                 type: Array,
                 default: () => Array
+            },
+
+            gameStarted: {
+                type: Boolean,
+                default: true
             }
         },
 
@@ -71,6 +77,10 @@
 
             canAddingPlayer() {
                 return !(this.newPlayers.length >= this.maxPlayers) 
+            },
+
+            canDeletePlayers() {
+                return !this.gameStarted
             },
 
             allFieldFilled() {
@@ -98,7 +108,9 @@
             },
 
             savePlayers() {
-                console.log(this.players)
+                this.newPlayers.forEach((item, index) => {
+                    item.id = index
+                })
                 this.$emit('savePlayers', this.newPlayers)
             }
         },

@@ -5,8 +5,17 @@
         :players="players"
         @showPopup="showingAddPlayer"
         />
+
+        <Game
+        v-if="gameStarted"
+        :players="players"
+        >
+
+        </Game>
         <StartPanel
+        v-if="!gameStarted"
         :canStartGame="canStartGame"
+        @startNullGame="startNullGame"
         >
         </StartPanel>
       </div>
@@ -17,6 +26,7 @@
       >
         <div class="">
           <AddPlayers
+          :gameStarted="gameStarted"
           :players="players"
           @savePlayers="savePlayers"
           ></AddPlayers>          
@@ -33,6 +43,8 @@ import Players from '@/components/players'
 import AddPlayers from '@/components/players/addPlayers'
 import Popup from '@/components/popup'
 import StartPanel from '@/components/startpanel'
+import Game from '@/components/game'
+
 export default {
   name: 'App',
 
@@ -40,12 +52,24 @@ export default {
     Players,
     Popup,
     AddPlayers,
-    StartPanel
+    StartPanel,
+    Game
   },
 
   data: () => {
     return {
-      players: [],
+      gameStarted: true,
+      players: [
+        {
+          "title": "aleksey",
+          "balance": 15000000
+        },
+
+        {
+          "title": "valeria",
+          "balance": 15000000
+        }
+      ],
       showAddPlayer: false
     }
     
@@ -77,6 +101,10 @@ export default {
     savePlayers(newPlayers) {
       this.players = newPlayers
       this.closingAddPlayer()
+    },
+
+    startNullGame() {
+      this.gameStarted = true
     }
   },
 

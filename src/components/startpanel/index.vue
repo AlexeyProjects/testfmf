@@ -1,6 +1,7 @@
 <template>
     <div class="startpanel">
         <div 
+        @click="startNullGame"
         :class="{ 'btn--disable': !canStartGame }"
         class="btn">
             {{ title }}
@@ -28,6 +29,12 @@
                 else {
                     return 'Добавьте 2 или более игроков чтобы начать'
                 }
+            }
+        },
+
+        methods: {
+            startNullGame() {
+                this.$emit('startNullGame')
             }
         }
     }
