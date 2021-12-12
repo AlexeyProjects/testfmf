@@ -60,14 +60,17 @@ export default {
     return {
       gameStarted: true,
       players: [
-        {
+        { "id": 0,
           "title": "aleksey",
-          "balance": 15000000
+          "balance": 15000000,
+          "position": 0
         },
 
-        {
+        { 
+          "id": 1,
           "title": "valeria",
-          "balance": 15000000
+          "balance": 15000000,
+          "position": 0
         }
       ],
       showAddPlayer: false

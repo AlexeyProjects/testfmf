@@ -95,7 +95,8 @@
             addPlayer() {
                 let newPlayer = {
                     "title": '',
-                    "balance": 15000000
+                    "balance": 15000000,
+                    "position": 0
                 }
                 this.newPlayers.push(newPlayer)
             },

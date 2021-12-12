@@ -2,36 +2,103 @@
     {
         "id": 0,
         "title": "title",
-        "actions": []
+        "action": "subtract",
+        "value": 1300000
     },
     {
         "id": 1,
         "title": "title",
-        "actions": []
+        "action": "append",
+        "value": 500000
     },
     {
         "id": 2,
         "title": "title",
-        "actions": []
+        "action": "subtract",
+        "value": 10000
     },
     {
         "id": 3,
         "title": "title",
-        "actions": []
+        "action": "append",
+        "value": 2000000
     },
     {
         "id": 4,
         "title": "title",
-        "actions": []
+        "action": "subtract",
+        "value": 300000
     },
     {
         "id": 5,
         "title": "title",
-        "actions": []
+        "action": "append",
+        "value": 200000
     },
     {
         "id": 6,
         "title": "title",
-        "actions": []
+        "action": "append",
+        "value": 60000
+    },
+    {
+        "id": 7,
+        "title": "title",
+        "action": "subtract",
+        "value": 40000
+    },
+    {
+        "id": 8,
+        "title": "title",
+        "action": "subtract",
+        "value": 700000
+    },
+    {
+        "id": 9,
+        "title": "title",
+        "action": "append",
+        "value": 800000
+    },
+    {
+        "id": 10,
+        "title": "title",
+        "action": "subtract",
+        "value": 1900000
+    },
+    {
+        "id": 11,
+        "title": "title",
+        "action": "append",
+        "value": 3100000
+    },
+    {
+        "id": 12,
+        "title": "title",
+        "action": "subtract",
+        "value": 200000
+    },
+    {
+        "id": 13,
+        "title": "title",
+        "action": "subtract",
+        "value": 800000
+    },
+    {
+        "id": 14,
+        "title": "title",
+        "action": "append",
+        "value": 900000
+    },
+    {
+        "id": 15,
+        "title": "title",
+        "action": "append",
+        "value": 1200000
+    },
+    {
+        "id": 16,
+        "title": "title",
+        "action": "subtract",
+        "value": 1300000
     }
 ]
