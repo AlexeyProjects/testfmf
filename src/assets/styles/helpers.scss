@@ -1,3 +1,6 @@
+$green: #238636;
+$red: #a3282e;
+
 .col {
     display: flex;
     flex-direction: column;
@@ -19,6 +22,15 @@
 .width {
     &--full {
         width: 100%;
+    }
+}
+
+.p {
+    &--green {
+        color: $green;
+    }
+    &--red {
+        color: $red;
     }
 }
 

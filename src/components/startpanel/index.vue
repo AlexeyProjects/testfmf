@@ -3,8 +3,8 @@
         <div 
         @click="startNullGame"
         :class="{ 'btn--disable': !canStartGame }"
-        class="btn">
-            {{ title }}
+        class="btn btn--white">
+            {{ startTitle }}
         </div>
     </div>
 </template>
@@ -14,7 +14,17 @@
         name: 'startpanel',
 
         props: {
+            startTitle: {
+                type: String,
+                default: 'Начать игру'
+            },
+
             canStartGame: {
+                type: Boolean,
+                default: false
+            },
+
+            canRefreshGame: {
                 type: Boolean,
                 default: false
             }
@@ -22,19 +32,18 @@
         },
 
         computed: {
-            title() {
-                if ( this.canStartGame ) {
-                    return 'Начать игру'
-                }
-                else {
-                    return 'Добавьте 2 или более игроков чтобы начать'
-                }
-            }
+
         },
 
         methods: {
             startNullGame() {
-                this.$emit('startNullGame')
+                if ( this.startTitle === 'Начать игру' ) {
+                    this.$emit('startNullGame')
+                }
+                else if ( this.canRefreshGame ) {
+                    this.$emit('refreshGameData')
+                }
+                
             }
         }
     }

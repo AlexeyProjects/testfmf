@@ -8,7 +8,14 @@ export default new Vuex.Store({
   state: {
     maxPlayers: 5,
     maxStep: 6,
-    field: []
+    maxNegativeBalance: -5000000,
+    field: [],
+    newPlayer: {
+      "title": '',
+      "balance": 15000000,
+      "position": 0,
+      "losed": false
+    }
   },
 
   mutations: {

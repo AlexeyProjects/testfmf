@@ -1,37 +1,39 @@
 <template>
     <div class="addPlayers col">
-        <div 
-        v-for="(item,key) in newPlayers"
-        class="addPlayers-item flex flex-align-center mb-10"
-        :key="key"
-        >
-            <input 
-            class="input"
-            v-model="item.title"
-            placeholder="Введите имя игрока" 
-            type="text">
-            <div class="">
+        <transition-group class="col" name="list-complete" tag="div">
+            <div 
+            v-for="(item,key) in newPlayers"
+            class="addPlayers-item list-complete-item flex flex-align-center mb-10"
+            :key="key"
+            >
+                <input 
+                class="input"
+                v-model="item.title"
+                placeholder="Введите имя игрока" 
+                type="text">
+                <div class="">
 
+                </div>
+                <CloseIcon
+                v-if="canDeletePlayers"
+                @clicked="deletePlayer(key)"
+                class="addPlayers-item__delete ml-10"
+                />
             </div>
-            <CloseIcon
-            v-if="canDeletePlayers"
-            @clicked="deletePlayer(key)"
-            class="addPlayers-item__delete ml-10"
-            />
-        </div>
+        </transition-group
         
 
         <div class="addPlayers-panel col mt-15">
             <div 
             v-if="canAddingPlayer"
             @click="addPlayer"
-            class="btn mb-10">
+            class="btn btn--white mb-10">
                 Добавить игрока
             </div>
             <div 
             @click="savePlayers"
             :class="{ 'btn--disable' : !allFieldFilled }"
-            class="btn">
+            class="btn btn--white">
                 Сохранить
             </div>
         </div>
@@ -72,7 +74,8 @@
         
         computed: {
             ...mapState({
-                maxPlayers: state => state.maxPlayers
+                maxPlayers: state => state.maxPlayers,
+                newPlayer: state => state.newPlayer
             }),
 
             canAddingPlayer() {
@@ -93,11 +96,8 @@
 
         methods: {
             addPlayer() {
-                let newPlayer = {
-                    "title": '',
-                    "balance": 15000000,
-                    "position": 0
-                }
+                let newPlayer = {}
+                Object.assign(newPlayer, this.newPlayer)
                 this.newPlayers.push(newPlayer)
             },
 
@@ -135,5 +135,17 @@
         }
 
 
+    }
+
+    .list-complete-item {
+        transition: all .4s;
+        margin-right: 10px;
+    }
+        .list-complete-enter, .list-complete-leave-to {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+        .list-complete-leave-active {
+        position: absolute;
     }
 </style>

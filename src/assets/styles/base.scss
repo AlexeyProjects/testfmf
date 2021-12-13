@@ -6,6 +6,7 @@ body {
     font-family: 'Open Sans', sans-serif;
     font-size: 1.6rem;
     padding: 5rem;
+    background-color: #e5e5e5;
 }
 
 * {
@@ -47,6 +48,14 @@ body {
     padding: .5rem 3rem;
     border-radius: .5rem;
     transition: .3s;
+    &--white {
+        background-color: #fff;
+        color: #000;
+        &:hover {
+            background-color: #000;
+            color: #fff;
+        }
+    }
     &:hover {
         cursor: pointer;
     }
@@ -54,4 +63,18 @@ body {
         pointer-events: none;
         background-color: rgba(0,0,0,0.2);
     }
+}
+
+::-webkit-scrollbar {
+    width: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #adadad;
+    border-radius: 10px;
+    border: 2px solid #fff;
+}
+
+::-webkit-scrollbar-track {
+    background: #fff;
 }

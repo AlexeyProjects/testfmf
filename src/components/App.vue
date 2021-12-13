@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-      <div class="container flex-center">
+      <div class="container flex-center col">
         <Players
         :players="players"
         @showPopup="showingAddPlayer"
@@ -8,14 +8,23 @@
 
         <Game
         v-if="gameStarted"
+        @gameOver="gameOver"
         :players="players"
         >
 
         </Game>
+        <div 
+        v-if="!gameStarted && winner"
+        class="winer mb-15 title-24">
+          Победитель {{ winner.title }} с балансом {{ winner.balance }}
+        </div>
         <StartPanel
         v-if="!gameStarted"
+        :startTitle="startTitle"
         :canStartGame="canStartGame"
+        :canRefreshGame="canRefreshGame"
         @startNullGame="startNullGame"
+        @refreshGameData="refreshGameData"
         >
         </StartPanel>
       </div>
@@ -56,23 +65,39 @@ export default {
     Game
   },
 
+  watch: {
+    canStartGame(val) {
+      if (!val) {
+        this.startTitle = 'Чтобы начать игру нужно добавить более 2ух игроков'
+      }
+
+      if (val) {
+        this.startTitle = 'Начать игру'
+      }
+    }
+  },
+
   data: () => {
     return {
-      gameStarted: true,
+      gameStarted: false,
       players: [
         { "id": 0,
           "title": "aleksey",
-          "balance": 15000000,
-          "position": 0
+          "balance": 100000,
+          "position": 0,
+          "losed": false
         },
 
         { 
           "id": 1,
           "title": "valeria",
           "balance": 15000000,
-          "position": 0
+          "position": 0,
+          "losed": false
         }
       ],
+      winner: '',
+      startTitle: 'Начать игру',
       showAddPlayer: false
     }
     
@@ -82,6 +107,11 @@ export default {
     canStartGame() {
       return this.players.length >= 2
     },
+
+    canRefreshGame() {
+      if ( this.winner && this.gameOver )
+      return true
+    }
   },
 
   methods: {
@@ -108,6 +138,20 @@ export default {
 
     startNullGame() {
       this.gameStarted = true
+    },
+
+    refreshGameData() {
+      console.log('refresh')
+      this.players = []
+      this.winner = ''
+      this.showingAddPlayer()
+    },
+
+    gameOver(player) {
+      console.log(`Победитель ${player.title}`)
+      this.winner = player
+      this.gameStarted = false
+      this.startTitle = 'Нажмите чтобы начать игру заного'
     }
   },
 
