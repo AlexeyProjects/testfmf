@@ -34,6 +34,12 @@ $red: #a3282e;
     }
 }
 
+.hovering {
+    &:hover {
+        cursor: pointer;
+    }
+}
+
 .flex {
     &-center {
         display: flex;

@@ -27,7 +27,6 @@ export default new Vuex.Store({
   actions: {
     async getField() {
         let {data} = await Axios.get('field.json');
-        console.log(data)
         this.commit('putField', data)
     }
   },

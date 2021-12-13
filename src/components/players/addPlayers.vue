@@ -24,18 +24,21 @@
         
 
         <div class="addPlayers-panel col mt-15">
+
             <div 
             v-if="canAddingPlayer"
             @click="addPlayer"
             class="btn btn--white mb-10">
                 Добавить игрока
             </div>
+
             <div 
             @click="savePlayers"
             :class="{ 'btn--disable' : !allFieldFilled }"
             class="btn btn--white">
                 Сохранить
             </div>
+
         </div>
         
     </div>    
@@ -103,7 +106,6 @@
 
             deletePlayer(key) {
                 let item = this.newPlayers[key]
-                console.log(item)
                 let index = this.newPlayers.indexOf(item)
                 this.newPlayers.splice(index,1)
             },
@@ -128,9 +130,7 @@
         &-item {
             &__delete {
                 width: 1.4rem;
-                .stroke {
-                    stroke: red
-                }
+
             }
         }
 

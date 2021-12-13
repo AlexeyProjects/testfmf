@@ -26,7 +26,7 @@
         <VueDragResize 
         :isActive="false"  :w="changeLog.width" :h="changeLog.height" :y="changeLog.top" :x="changeLog.left"  v-on:resizing="resize" v-on:dragging="resize">
             <div class="log pa-15">
-                <div class="">
+                <div class="mb-10">
                     История событий
                 </div>
                 <div class="">
@@ -52,6 +52,8 @@
             <Transfering
             :players="players"
             :currentStepPlayer="currentStepPlayer"
+            @closePopup="closeTransfering"
+            @transferedCoin="transferedCoin"
             ></Transfering>
         </Popup>
 
@@ -65,11 +67,19 @@
     import VueDragResize from 'vue-drag-resize'
     import Vue from 'vue'
 
+
     import Popup from '@/components/popup'
     import Transfering from '@/components/transfering'
 
+    import filterMixin from '@/mixins/filters'
+
+    var moment = require('moment'); // require
     export default {
         name: "game",
+
+        mixins: [
+            filterMixin
+        ],
 
         components: {
             VueDragResize,
@@ -81,18 +91,42 @@
             players: {
                 type: Array,
                 default: () => []
+            },
+
+            savedLog: {
+                type: Array,
+                default: () => []
+            },
+
+            savedTurn: {
+                type: Number,
+                default: null
+            },
+
+            gameContining: {
+                type: Boolean,
+                default: false
+            },
+
+            savedRollNumber: {
+                type: Number,
+                default: null
             }
         },
 
         watch: {
             turnPlayer(val) {
+
                 if ( val === this.players.length ) {
                     this.turnPlayer = 0
                 }
 
-                if ( this.players[val].losed ) {
+                if ( this.currentStepPlayer.losed ) {
                     this.turnPlayer += 1
                 }
+
+                let stringForLocal = JSON.stringify(val)
+                localStorage.setItem('turnPlayer', stringForLocal)
             },
 
             countPlayersInGame(val) {
@@ -106,7 +140,21 @@
                     })
                     this.$emit('gameOver',winner)
                 }
+            },
+
+            log: {
+                deep: true,
+                handler(val) {
+                    let stringForLocal = JSON.stringify(val)
+                    localStorage.setItem('log', stringForLocal)
+                }
+            },
+
+            rollNumber(val) {
+                let savedRollNumber = JSON.stringify(val)
+                localStorage.setItem('rollNumber', savedRollNumber)
             }
+
         },
 
         data: () => {
@@ -118,7 +166,7 @@
                 changeLog: {
                     width: 350,
                     height: 500,
-                    top: 200,
+                    top: 0,
                     right: 0
                 },
                 showingTransfering: false
@@ -160,54 +208,17 @@
                         actionTitle = 'Заплачено'
                         break;
                 }
-                console.log(action)
-                console.log(actionTitle)
-
-                // let titlesMillions = ["миллион", 'миллиона', 'миллионов']
-                // let titlesThous = ["Тысяч", 'Тысяча', 'Тысяч']
-
-                // let filterObj = {
-                //     millons: titlesMillions,
-                //     thous: titlesThous
-                // }
-
-                // // function getNoun(val, filterObj) {
-                // //     console.log(filterObj)
-                // //     let titleForFilter = ''
-                // //     if ( +val >= 1000000 ) {
-                // //         titleForFilter = filterObj.millons
-                // //         console.log(titleForFilter)  
-                // //     }
-                // //     else { 
-                // //         titleForFilter = filterObj.thous
-                // //         console.log(titleForFilter)  
-                // //     }
-                // //     console.log(titleForFilter)
-                // //     let n = Math.abs(val);
-                // //     n %= 100;
-                // //     if (n >= 5 && n <= 20) {
-                // //         return titleForFilter[2];
-                // //     }
-                // //     n %= 10;
-                // //     if (n === 1) {
-                // //         return `${val}${titleForFilter[0]}`;
-                // //     }
-                // //     if (n >= 2 && n <= 4) {
-                // //         return `${val}${titleForFilter[1]}`;
-                // //     }
-                // //     return `${val}${titleForFilter[2]}`;
-                // // }
-
-                
                 newMessage = `
-                    Игрок ${player.title} выбросил ${this.rollNumber} и переместилась с позиции ${oldPosition} на позицию ${player.position}. ${actionTitle} <span class="p--${ actionTitle === 'Присвоено' ?'green':'red'}">${value}</span> Текущий баланс ${player.balance}
+                    Игрок ${player.title} выбросил ${this.rollNumber} и переместилась с позиции ${oldPosition} на позицию ${player.position}. ${actionTitle} <span class="p--${ actionTitle === 'Присвоено' ?'green':'red'}">${this.numberViewing(value)}</span> Текущий баланс ${this.numberViewing(+player.balance)}
                 `
                 this.logAddMessage(newMessage)
                 
             },
             
             logAddMessage(message) {
-                this.log.push(message)
+                var timeToShow = moment().format('hh:mm:ss');  //9:02am
+                let newMessage = `[${timeToShow}] ${message} ` 
+                this.log.push(newMessage)
                 function scrollToBottom() {
                     let height = document.querySelector('.log').scrollHeight
                     document.querySelector('.log').scrollTop = height
@@ -228,8 +239,7 @@
                     player.balance += value
                 }
                 else if ( action === 'subtract' ) {
-                    // Поменять после тестов
-                    player.balance -= 20000000
+                    player.balance -= value
                     
                     if ( player.balance <= this.maxNegativeBalance ) {
                         this.playerLose(player)
@@ -245,7 +255,6 @@
             },
 
             playerLose(player) {
-                console.log(`Проиграл игрок ${player.title}`)
                 Vue.set(player, 'losed', true)
                 this.countPlayersInGame -= 1
                 
@@ -257,6 +266,15 @@
 
             closeTransfering() {
                 this.showingTransfering = false
+            },
+
+            transferedCoin(player, summ) {
+                this.currentStepPlayer.balance -= +summ
+                player.balance += +summ
+                let newMessage = `
+                Игрок ${this.currentStepPlayer.title} перевел <span class="p--green">${this.numberViewing(+summ)}</span> монет игроку ${player.title}
+                `
+                this.logAddMessage(newMessage)
             }
 
         },
@@ -284,6 +302,12 @@
 
         mounted() {
             this.countPlayersInGame = this.players.length
+            
+            if ( this.gameContining ) {
+                this.log = this.savedLog
+                this.turnPlayer = this.savedTurn
+                this.rollNumber = this.savedRollNumber
+            }
         }
 
 
